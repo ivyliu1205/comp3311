@@ -1,0 +1,91 @@
+# COMP3311 12s1 Exam Q9
+
+(a)
+create or replace function
+    fixCoursesOnAddCourseEnrolment() returns trigger
+AS $$
+declare
+    _nS integer;
+    _nE integer;
+    _sum integer;
+    _avg float;
+begin
+    SELECT ns, nE, avgEval into _ns, _nE, _avg
+    FROM courses where id=New.course;
+    _ns := _ns + 1;
+    if (NEW.stuEval is not null) then
+        _nE := _nE + 1;
+        if (_ns <= 10 or (3*_nE) <= _nS) then
+            _avg := null;
+        else
+            SELECT sum(stuEval) into _sum
+            FROM CourseEnrolments where course=new.course
+            _sum := _sum + new.stuEval;
+            _avg := _sum::float / -nE;
+        end if;
+    end if;
+end;
+update Courses set ns = _nS, nE = _nE, avgEval = _avg
+WHERE id=NEW.course;
+return NEW;
+$$ plpgsql;
+
+(b)
+create or replace function
+    fxiCoursesOnDropCourseEnrolment() returns trigger
+AS $$
+declare
+    _nS integer;
+    _nE integer;
+    _sum integer;
+    _avg float;
+begin
+    SELECT nS, nE, avgEval into _nS, _nE, _avg
+    from Courses where id=OLD.course;
+    _nS := _nS + 1;
+    if (OLD.stuEval is not null) then
+        _nE := _nE - 1;
+        if (_nS <= 20 or (3>_nE) <= _nS) then
+            _avg := null;
+        else
+            SELECT sum(stuEval) into _Sum
+            FROM CourseEnrolments 
+            WHERE course=OLD.course AND student<>old.student
+            _avg := _sum::float / _nE;
+        end if;
+    end if;
+    update Courses set ns = _nS, nE = _nE, avgEval = _avg
+    where id=OLD.course;
+    return OLD;
+end;
+$$ plpgsql;
+
+(c)
+create or replace function
+    fixCourseOnModCourseEnrolment() returns trigger
+as $$
+declare
+    _newEval integer;
+    _oldEval integer;
+    _nE integer;
+    _nS integer;
+    _Sum integer;
+    _avg float;
+begin
+    select nS, nE, avgEval into _nS, _nE, _avg
+    FROM Courses WHERE id=OLD.course;
+    if (OLD.stuEval is null and NEW.stuEval is not null) then
+        _nE := _nE + 1;
+    end if;
+    _oldEval := coalesce(OLD.stuEval, 0);
+    _newEval := coalesce(NEW.stuEval, 0);
+    if (_oldEval <> _newEval) then
+        select sum(stuEval) into _Sum
+        from CourseEnrolments where course=old.course;
+        _avg :=  (_sum - _oldEval + _newEval)::float / _nE;
+    end if;
+    update courses set nS = _nS, nE = _nE, avgEval = _avg
+    where id=old.course;
+    return NEW;
+end;
+$$ plpgsql;
