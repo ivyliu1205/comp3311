@@ -1,0 +1,17 @@
+a.
+Answer = Job
+
+b.
+Answer = Sel[jcity='London'](Job)
+
+c.
+Answer = Proj[supplier](Sel[job=J1](SPJ))
+
+e.
+Answer = Proj[colour, city](Part)
+
+f.
+Answer = Proj[sid, pid, jib](Supplier Join Part Join Job)
+
+I.
+Answer = Count(Proj[job](Sel[supplier=S1](SPJ)))

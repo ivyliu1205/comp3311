@@ -1,0 +1,34 @@
+1. How many movies are in the database?
+    > select count(*) from Movies;
+    > 65
+    
+2. What are the titles of all movies in the database?
+    > select title from Movies;
+    
+3. What is the earliest year that film was made (in this database)? (Hint: there is a min() summary function)
+    > select min(year) from Movies;
+    > 1975
+
+4. How many actors are there (in this database)?
+    > select count(*) from Actors;
+    > 2999
+    
+5. Are there any actors whose family name is Zeta-Jones? (case-sensitive)
+    > select * from Actors where familyName = 'Zeta-Jones';
+    > yes
+    
+6. What genres are there?
+    > select DISTINCT genre from BelongsTo;
+    
+7. What movies did Spielberg direct? (title+year)
+    > (find Spielberg's id) 
+      select id from Directors where familyName = 'Spielberg';
+    > select movie from Directs where director = 4;
+    > select title from Movies where id >= 25 and id <= 44;
+    
+8. Which actor has acted in all movies (in this database)?
+    
+    
+9. Are there any directors in the database who don't direct any movies?
+    
+    

@@ -1,0 +1,98 @@
+Data:
+    > movies, actors/actresses, producer, directors, crew, plot, popularity, genre, bloopers, etc.
+    > (focus on) movies, genres, directors, actors, and information about the roles that actors play in movies
+    
+Relationship:
+
+Constraints:
+
+
+1. What kind of information do we need to store?
+2. what kind of information do we want to store about movies?
+3. What information do we want to store about actors?
+4. ...
+
+//////////////////////////////////////////////////////////////////
+///                        1st ver.                     //////////
+///                  . director has no gender           //////////
+///                  . has no roles                     //////////
+//////////////////////////////////////////////////////////////////
+typedef struct Movie {
+	char *title;     // e.g. "Avatar"
+	int   yearMade;  // sometime after 1850
+	char *genre;     // what kind of movie is it
+} Movie;
+
+typedef struct Actor {
+	char *name;      // e.g. "Clint Eastwood"
+	int   yearBorn;  // sometime after 1850
+	char  gender;    // i.e. 'm' or 'f'
+} Actor;
+
+typedef struct Director {
+	char *name       // e.g. "Steve Spielberg" or "Clint Eastwood"
+	int   yearBorn;  // sometime after 1850
+} Director;
+
+
+//////////////////////////////////////////////////////////////////
+///                        2nd ver.                     //////////
+///       . might be connected to the wrong director    //////////
+//////////////////////////////////////////////////////////////////
+typedef struct Movie {
+	char *title;     // e.g. "Avatar"
+	int   yearMade;  // sometime after 1850
+	char *director;  // e.g. "James Cameron"
+} Movie;
+
+
+//////////////////////////////////////////////////////////////////
+///                        3rd ver.                     //////////
+//////////////////////////////////////////////////////////////////
+typedef struct Movie {
+	char *title;        // e.g. "Avatar"
+	int   yearMade;     // sometime after 1850
+	char *genre;        // what kind of movie is it
+	Director *director; // e.g. ref to "James Cameron"
+} Movie;
+
+
+//////////////////////////////////////////////////////////////////
+///                        4th ver.                     //////////
+///                  . add Role part                    ////////// 
+//////////////////////////////////////////////////////////////////
+typedef struct Role {
+	Movie *movie;  // e.g. ref to "Wall Street"
+	char  *role;   // e.g. "Gordon Gekko"
+	struct Role *next;
+} Role;
+
+typedef struct Actor {
+	char *name;      // e.g. "Clint Eastwood"
+	int   yearBorn;  // sometime after 1850
+	char gender;     // i.e. 'm' or 'f'
+	Role *roles;     // linked list of Roles
+} Actor;
+
+
+//////////////////////////////////////////////////////////////////
+///                        5th ver.                     //////////
+///                  . add Genre part                   ////////// 
+//////////////////////////////////////////////////////////////////
+typedef struct Genre {
+	char *name;
+	struct Genre *next;
+} Genre;
+
+typedef struct Movie {
+	char *title;        // e.g. "Avatar"
+	int   yearMade;     // sometime after 1850
+	Genre *genre;       // linked list of Genres
+	Director *director; // e.g. ref to "James Cameron"
+} Movie;
+
+
+
+
+
+
